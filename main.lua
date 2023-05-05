@@ -14,7 +14,7 @@ WINDOW_HEIGHT = 720
 function love.load()
     --love.graphics.setDefaultFilter('nearest', 'nearest')
 
-    love.window.setTitle('tap')
+    love.window.setTitle('Tap')
 
     love.window.setMode( WINDOW_WIDTH, WINDOW_HEIGHT, {
         fullscreen = false,
@@ -28,7 +28,6 @@ function love.load()
 	}
 	
 
-    
 
     circle = Circle( 900, 90, 75)
     square = Square(300, 50, 150, 150)
@@ -44,16 +43,12 @@ function love.load()
 
     gamestate = 'start'
 
-
-
-
 end
 
 
-
-function love.resize(w, h)
-	push:resize(w, h)
-end
+--function love.resize(w, h)
+--	push:resize(w, h)
+--end
 
 
 function love.update(dt)
@@ -64,7 +59,7 @@ function love.update(dt)
 
         if square.y > 520 - square.height/2 and square.y < 520 and square.x == 300 and love.keyboard.isDown('f') then
             square:reset()
-            smoving = smoving * 1.03
+            smoving = smoving * 1.3
             playerscore = playerscore + 1
             sounds['paddle_hit']:play()
         elseif square.y >  520 and square.x == 300 and not(love.keyboard.isDown('f')) then
@@ -74,15 +69,21 @@ function love.update(dt)
     
         if circle.y > 590 - circle.radius and circle.y < 520 and circle.x == 900 and love.keyboard.isDown('j') then
             circle:reset()
-            cmoving = cmoving * 1.03
+            cmoving = cmoving * 1.3
             playerscore = playerscore + 1
-            sounds['paddle_hit']:play()
+             sounds['paddle_hit']:play()
         elseif circle.y > 590 and circle.x == 900 and not (love.keyboard.isDown('j')) then
             circle:reset()
             sounds['wall_hit']:play()
         end
 
-    end
+        if playerscore >= 10 then
+           gamestate = 'won'
+        end
+
+    
+    end   
+
     
 
 end
@@ -93,17 +94,13 @@ function love.keypressed(key)
     elseif (key == 'enter' or key == 'return') then
         if gamestate == 'start' then
             gamestate = 'play'
-        end
-
-    end
-    
-    if gamestate == 'play'  and playerscore == 10 then
-        gamestate = 'won'
         elseif gamestate == 'won' then
             gamestate = 'start'
-
+    
             playerscore = 0
         end
+        
+    end
 end
 
 
@@ -125,9 +122,10 @@ function love.draw()
         square:render()
         love.graphics.setColor(200/255, 0/255, 255/255, 255/255)
         circle:render()
-    elseif gamestate == 'win' then
+    elseif gamestate == 'won' then
+        love.graphics.setFont(Big_font)
         love.graphics.printf('CONGRATULATIONS!', 0, 10, WINDOW_WIDTH, 'center')
-        love.graphics.printf('YOU WIN!', 0, 25, WINDOW_WIDTH, 'center')
+        love.graphics.printf('YOU WIN!', 0, 35, WINDOW_WIDTH, 'center')
     end
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 
@@ -150,7 +148,7 @@ end
 
 function displayFPS()
     love.graphics.setFont(Score_font)
-    love.graphics.setColor(0,255, 255/255, 0/255, 255/255)
-    love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10, WINDOW_WIDTH)
+    love.graphics.setColor(0/255, 255/255, 0/255, 255/255)
+    love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 50, 10)
     love.graphics.setColor(255/255, 255/255, 255/255, 255/255)
 end

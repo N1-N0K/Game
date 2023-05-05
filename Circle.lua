@@ -15,6 +15,7 @@ end
 
 function Circle:reset()
     self.y = 30
+    cmoving = 100
 end
 
 function Circle:render()

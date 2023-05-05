@@ -14,8 +14,8 @@ function Square:update(dt)
 end
 
 function Square:reset()
-    self.x = 300
     self.y = 100
+    smoving = 100
 end
 
 function Square:render()
